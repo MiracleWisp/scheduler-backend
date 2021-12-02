@@ -23,12 +23,11 @@ CREATE TABLE IF NOT EXISTS services
 
 CREATE TABLE IF NOT EXISTS appointments
 (
-    id         uuid PRIMARY KEY                  DEFAULT uuid_generate_v4(),
-    date       timestamp with time zone NOT NULL,
-    status     text                     NOT NULL DEFAULT 'DRAFT',
-    duration   smallint                 NOT NULL CHECK ( duration > 0 ),
-    user_id    uuid                     NOT NULL REFERENCES users,
-    service_id uuid                  NOT NULL REFERENCES services
+    id         uuid PRIMARY KEY     DEFAULT uuid_generate_v4(),
+    date       timestamptz NOT NULL,
+    status     text        NOT NULL DEFAULT 'DRAFT',
+    client_id  uuid        NOT NULL REFERENCES users,
+    service_id uuid        NOT NULL REFERENCES services
 );
 
 CREATE TABLE IF NOT EXISTS review
@@ -37,7 +36,8 @@ CREATE TABLE IF NOT EXISTS review
     text          text     NOT NULL,
     rating        smallint NOT NULL CHECK ( rating >= 1 AND rating <= 5),
     author_id     uuid     NOT NULL REFERENCES users,
-    specialist_id uuid     NOT NULL REFERENCES users
+    specialist_id uuid     NOT NULL REFERENCES users,
+    created_at    timestamptz      DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS schedules
