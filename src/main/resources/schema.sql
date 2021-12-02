@@ -50,3 +50,5 @@ CREATE TABLE IF NOT EXISTS schedules
     end_date        date,
     specialist_id   uuid     NOT NULL REFERENCES users
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS roles text[];

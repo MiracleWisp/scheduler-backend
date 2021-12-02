@@ -1,6 +1,7 @@
 package ml.uchvatov.schedule.auth.controller;
 
 import lombok.AllArgsConstructor;
+import ml.uchvatov.schedule.auth.dto.AuthResponse;
 import ml.uchvatov.schedule.auth.service.AuthService;
 import ml.uchvatov.schedule.model.entity.User;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<String>> user() {
-        return Mono.just(ResponseEntity.ok("Content for user"));
+    public Mono<ResponseEntity<AuthResponse>> login(@RequestBody User user) {
+        return authService.login(user).map(authResponse -> ResponseEntity.ok().body(authResponse));
     }
 
     @PostMapping("/signup")
