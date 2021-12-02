@@ -2,12 +2,14 @@ package ml.uchvatov.schedule.model.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 import java.time.LocalTime;
 import java.util.UUID;
 
 @Data
+@Table("schedules")
 public class Schedule {
 
     @Id
