@@ -49,17 +49,17 @@ public class JWTUtil {
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", user.getRoles());
-        return doGenerateToken(claims, user.getUsername());
+        return doGenerateToken(claims, user.getId().toString());
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String username) {
+    private String doGenerateToken(Map<String, Object> claims, String id) {
         long expirationTimeLong = Long.parseLong(expirationTime); //in second
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(id)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
                 .signWith(key)

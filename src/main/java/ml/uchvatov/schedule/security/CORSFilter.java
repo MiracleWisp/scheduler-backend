@@ -1,4 +1,4 @@
-package ml.uchvatov.schedule.configuration;
+package ml.uchvatov.schedule.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;

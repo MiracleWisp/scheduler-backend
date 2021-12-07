@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS appointments
     service_id uuid        NOT NULL REFERENCES services
 );
 
-CREATE TABLE IF NOT EXISTS review
+CREATE TABLE IF NOT EXISTS reviews
 (
     id            uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     text          text     NOT NULL,

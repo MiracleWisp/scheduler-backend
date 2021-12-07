@@ -1,5 +1,6 @@
 package ml.uchvatov.schedule.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
@@ -17,5 +18,6 @@ public class Review {
     private short rating;
     private Instant createdAt;
     private UUID authorId;
+    @JsonIgnore
     private UUID specialistId;
 }

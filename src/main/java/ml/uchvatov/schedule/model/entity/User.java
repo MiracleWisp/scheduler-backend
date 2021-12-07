@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    private boolean is_specialist;
+    private boolean isSpecialist;
     private String jobTitle;
     private String about;
     private List<Role> roles;

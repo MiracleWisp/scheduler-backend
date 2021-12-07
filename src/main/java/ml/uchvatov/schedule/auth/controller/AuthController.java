@@ -1,6 +1,6 @@
 package ml.uchvatov.schedule.auth.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.auth.dto.AuthResponse;
 import ml.uchvatov.schedule.auth.service.AuthService;
 import ml.uchvatov.schedule.model.entity.User;
@@ -13,14 +13,14 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/auth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/login")
     public Mono<ResponseEntity<AuthResponse>> login(@RequestBody User user) {
-        return authService.login(user).map(authResponse -> ResponseEntity.ok().body(authResponse));
+        return authService.login(user).map(ResponseEntity::ok);
     }
 
     @PostMapping("/signup")
