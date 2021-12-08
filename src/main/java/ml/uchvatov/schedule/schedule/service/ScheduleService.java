@@ -29,8 +29,14 @@ public class ScheduleService {
 
     public Mono<Schedule> updateSchedule(Schedule schedule) {
         return scheduleRepository.findById(schedule.getId())
+                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.NOT_FOUND, "Schedule not found"))
                 .filterWhen(foundSchedule -> authenticationFacade.getCurrentUserId().map(uuid -> uuid.equals(foundSchedule.getSpecialistId())))
                 .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.FORBIDDEN, "Trying to change schedule of another specialist"))
+                .map(foundSchedule -> {
+                    foundSchedule.setWorkStartTime(schedule.getWorkStartTime());
+                    foundSchedule.setWorkEndTime(schedule.getWorkEndTime());
+                    return foundSchedule;
+                })
                 .flatMap(scheduleRepository::save);
     }
 

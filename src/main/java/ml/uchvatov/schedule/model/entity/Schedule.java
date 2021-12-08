@@ -15,7 +15,7 @@ public class Schedule {
 
     @Id
     private UUID id;
-    private short day;
+    private int day;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime workStartTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")

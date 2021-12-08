@@ -1,6 +1,8 @@
 package ml.uchvatov.schedule.specialist.controller;
 
 import lombok.RequiredArgsConstructor;
+import ml.uchvatov.schedule.appointment.service.AppointmentService;
+import ml.uchvatov.schedule.model.entity.Appointment;
 import ml.uchvatov.schedule.model.entity.Review;
 import ml.uchvatov.schedule.model.entity.Schedule;
 import ml.uchvatov.schedule.model.entity.ServiceOffering;
@@ -27,6 +29,7 @@ public class SpecialistController {
     private final ServiceOfferingService serviceOfferingService;
     private final ReviewService reviewService;
     private final ScheduleService scheduleService;
+    private final AppointmentService appointmentService;
 
     @GetMapping
     public Mono<User> getSpecialist(@PathVariable String specialistId) {
@@ -46,5 +49,10 @@ public class SpecialistController {
     @GetMapping("/schedules")
     public Flux<Schedule> getSpecialistSchedules(@PathVariable String specialistId) {
         return scheduleService.getSchedulesBySpecialistId(UUID.fromString(specialistId));
+    }
+
+    @GetMapping("/appointments")
+    public Flux<Appointment> getSpecialistAppointments(@PathVariable String specialistId) {
+        return appointmentService.getAppointmentsBySpecialistId(UUID.fromString(specialistId));
     }
 }
