@@ -18,11 +18,6 @@ public class ServiceOfferingController {
 
     private final ServiceOfferingService serviceOfferingService;
 
-    @GetMapping
-    public Flux<ServiceOffering> getServices() {
-        return serviceOfferingService.getServiceOfferingsForCurrentUser();
-    }
-
     @PostMapping
     public Mono<ServiceOffering> createServiceOffering(@RequestBody ServiceOffering serviceOffering) {
         return serviceOfferingService.createServiceOffering(serviceOffering);
