@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping(value = "/service")
+@RequestMapping(value = "/serviceOfferings")
 @RequiredArgsConstructor
 public class ServiceOfferingController {
 

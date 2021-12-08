@@ -2,9 +2,11 @@ package ml.uchvatov.schedule.specialist.controller;
 
 import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.model.entity.Review;
+import ml.uchvatov.schedule.model.entity.Schedule;
 import ml.uchvatov.schedule.model.entity.ServiceOffering;
 import ml.uchvatov.schedule.model.entity.User;
 import ml.uchvatov.schedule.review.service.ReviewService;
+import ml.uchvatov.schedule.schedule.service.ScheduleService;
 import ml.uchvatov.schedule.serviceoffering.service.ServiceOfferingService;
 import ml.uchvatov.schedule.specialist.service.SpecialistService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +19,14 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/specialist/{specialistId}")
+@RequestMapping(value = "/specialists/{specialistId}")
 @RequiredArgsConstructor
 public class SpecialistController {
 
     private final SpecialistService specialistService;
     private final ServiceOfferingService serviceOfferingService;
     private final ReviewService reviewService;
+    private final ScheduleService scheduleService;
 
     @GetMapping
     public Mono<User> getSpecialist(@PathVariable String specialistId) {
@@ -38,5 +41,10 @@ public class SpecialistController {
     @GetMapping("/reviews")
     public Flux<Review> getSpecialistReviews(@PathVariable String specialistId) {
         return reviewService.getReviewsBySpecialistId(UUID.fromString(specialistId));
+    }
+
+    @GetMapping("/schedules")
+    public Flux<Schedule> getSpecialistSchedules(@PathVariable String specialistId) {
+        return scheduleService.getSchedulesBySpecialistId(UUID.fromString(specialistId));
     }
 }

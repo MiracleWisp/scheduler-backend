@@ -4,8 +4,13 @@ import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.auth.service.AuthenticationFacade;
 import ml.uchvatov.schedule.model.entity.Schedule;
 import ml.uchvatov.schedule.model.repository.ScheduleRepository;
+import ml.uchvatov.schedule.util.MonoUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +19,22 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final AuthenticationFacade authenticationFacade;
 
-    public Flux<Schedule> getAll() {
-        return scheduleRepository.findAll();
+
+    public Mono<Schedule> createSchedule(Schedule schedule) {
+        return authenticationFacade.getCurrentUserId().flatMap(uuid -> {
+            schedule.setSpecialistId(uuid);
+            return scheduleRepository.save(schedule);
+        });
+    }
+
+    public Mono<Schedule> updateSchedule(Schedule schedule) {
+        return scheduleRepository.findById(schedule.getId())
+                .filterWhen(foundSchedule -> authenticationFacade.getCurrentUserId().map(uuid -> uuid.equals(foundSchedule.getSpecialistId())))
+                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.FORBIDDEN, "Trying to change schedule of another specialist"))
+                .flatMap(scheduleRepository::save);
+    }
+
+    public Flux<Schedule> getSchedulesBySpecialistId(UUID specialistId) {
+        return scheduleRepository.findBySpecialistId(specialistId);
     }
 }

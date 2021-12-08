@@ -46,9 +46,10 @@ CREATE TABLE IF NOT EXISTS schedules
     day             smallint NOT NULL CHECK ( day >= 0 AND day <= 6),
     work_start_time time     NOT NULL,
     work_end_time   time     NOT NULL,
-    start_date      date     NOT NULL,
-    end_date        date,
-    specialist_id   uuid     NOT NULL REFERENCES users
+--     start_date      date     NOT NULL,
+--     end_date        date,
+    specialist_id   uuid     NOT NULL REFERENCES users,
+    UNIQUE (id, day)
 );
 
 ALTER TABLE users ADD COLUMN IF NOT EXISTS roles text[];

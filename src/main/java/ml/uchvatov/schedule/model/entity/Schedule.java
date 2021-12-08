@@ -1,11 +1,11 @@
 package ml.uchvatov.schedule.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -16,13 +16,16 @@ public class Schedule {
     @Id
     private UUID id;
     private short day;
-    @JsonFormat(pattern="hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime workStartTime;
-    @JsonFormat(pattern="hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime workEndTime;
+    /*
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate;
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate endDate;
+    */
+    @JsonIgnore
     private UUID specialistId;
 }
