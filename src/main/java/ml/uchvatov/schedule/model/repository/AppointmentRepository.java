@@ -15,6 +15,8 @@ public interface AppointmentRepository extends ReactiveCrudRepository<Appointmen
 
     Flux<Appointment> findByClientId(UUID clientId);
 
-    @Query("select case when count(1) > 0 then true else false end from appointments a join services s on s.id = a.service_id where NOT (:startDate > a.date + make_interval(mins => s.duration) OR a.date > :endDate)")
+    @Query("select case when count(1) > 0 then true else false end from appointments a join services s on s.id = a.service_id " +
+            "where a.status != 'CANCELED' AND created_at + make_interval(mins => 1) > now() " +
+            "AND NOT (:startDate > a.date + make_interval(mins => s.duration) OR a.date > :endDate)")
     Mono<Boolean> existsConflictingAppointments(ZonedDateTime startDate, ZonedDateTime endDate);
 }

@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS users
     password      text        NOT NULL,
     is_specialist boolean     NOT NULL DEFAULT false,
     job_title     text,
-    about         text
+    about         text,
+    roles         text[]
 );
 
 CREATE TABLE IF NOT EXISTS services
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS appointments
 (
     id         uuid PRIMARY KEY     DEFAULT uuid_generate_v4(),
     date       timestamptz NOT NULL,
+    created_at timestamptz          DEFAULT now(),
     status     text        NOT NULL DEFAULT 'DRAFT',
     client_id  uuid        NOT NULL REFERENCES users,
     service_id uuid        NOT NULL REFERENCES services
@@ -51,5 +53,3 @@ CREATE TABLE IF NOT EXISTS schedules
     specialist_id   uuid     NOT NULL REFERENCES users,
     UNIQUE (id, day)
 );
-
-ALTER TABLE users ADD COLUMN IF NOT EXISTS roles text[];
