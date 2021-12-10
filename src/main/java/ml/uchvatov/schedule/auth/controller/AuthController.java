@@ -5,6 +5,7 @@ import ml.uchvatov.schedule.auth.dto.AuthResponse;
 import ml.uchvatov.schedule.auth.service.AuthService;
 import ml.uchvatov.schedule.model.entity.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +27,10 @@ public class AuthController {
     @PostMapping("/signup")
     public Mono<ResponseEntity<Void>> signup(@RequestBody User user) {
         return authService.createUser(user).map(createdUser -> ResponseEntity.ok().build());
+    }
+
+    @GetMapping("/me")
+    public Mono<User> getCurrentUser() {
+        return authService.getCurrentUser();
     }
 }

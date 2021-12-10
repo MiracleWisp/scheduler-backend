@@ -20,6 +20,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationFacade authenticationFacade;
     private final JWTUtil jwtUtil;
 
     public Mono<User> createUser(User userToCreate) {
@@ -43,6 +44,11 @@ public class AuthService {
                     authResponse.setToken(jwtUtil.generateToken(foundUser));
                     return authResponse;
                 });
+    }
+
+    public Mono<User> getCurrentUser() {
+        return authenticationFacade.getCurrentUserId()
+                .flatMap(userRepository::findById);
     }
 }
 
