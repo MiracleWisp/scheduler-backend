@@ -1,7 +1,6 @@
 package ml.uchvatov.schedule.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Data;
 import ml.uchvatov.schedule.model.constant.Role;
 import org.springframework.data.annotation.Id;
@@ -26,6 +25,7 @@ public class User implements UserDetails {
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonProperty("isSpecialist")
     private boolean isSpecialist;
     private String jobTitle;
     private String about;
