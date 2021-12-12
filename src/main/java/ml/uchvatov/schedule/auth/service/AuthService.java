@@ -29,7 +29,11 @@ public class AuthService {
                 .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.UNAUTHORIZED, "Invalid email or password"))
                 .flatMap(exists -> {
                     userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
-                    userToCreate.setRoles(List.of(Role.ROLE_USER));
+                    if (userToCreate.isSpecialist()) {
+                        userToCreate.setRoles(List.of(Role.ROLE_USER, Role.ROLE_SPECIALIST));
+                    } else {
+                        userToCreate.setRoles(List.of(Role.ROLE_USER));
+                    }
                     return userRepository.save(userToCreate);
                 });
     }
