@@ -24,9 +24,9 @@ public class AuthService {
     private final JWTUtil jwtUtil;
 
     public Mono<User> createUser(User userToCreate) {
-        return userRepository.existsByEmail(userToCreate.getEmail())
+        return userRepository.existsByEmailIgnoreCase(userToCreate.getEmail())
                 .filter(exists -> !exists)
-                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.CONFLICT, "Invalid email or password"))
+                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.UNAUTHORIZED, "Invalid email or password"))
                 .flatMap(exists -> {
                     userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
                     userToCreate.setRoles(List.of(Role.ROLE_USER));
@@ -35,10 +35,10 @@ public class AuthService {
     }
 
     public Mono<AuthResponse> login(User user) {
-        return userRepository.findByEmail(user.getEmail())
-                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.CONFLICT, "Invalid email or password"))
+        return userRepository.findByEmailIgnoreCase(user.getEmail())
+                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.UNAUTHORIZED, "Invalid email or password"))
                 .filter(foundUser -> passwordEncoder.matches(user.getPassword(), foundUser.getPassword()))
-                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.CONFLICT, "Invalid email or password"))
+                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.UNAUTHORIZED, "Invalid email or password"))
                 .map(foundUser -> {
                     var authResponse = new AuthResponse();
                     authResponse.setToken(jwtUtil.generateToken(foundUser));
