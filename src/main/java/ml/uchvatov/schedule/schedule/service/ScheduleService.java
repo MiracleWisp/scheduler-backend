@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -41,6 +42,7 @@ public class ScheduleService {
     }
 
     public Flux<Schedule> getSchedulesBySpecialistId(UUID specialistId) {
-        return scheduleRepository.findBySpecialistId(specialistId);
+        return scheduleRepository.findBySpecialistId(specialistId)
+                .sort(Comparator.comparingInt(Schedule::getDay));
     }
 }
