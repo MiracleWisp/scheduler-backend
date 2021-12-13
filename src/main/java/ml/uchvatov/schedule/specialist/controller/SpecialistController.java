@@ -2,7 +2,7 @@ package ml.uchvatov.schedule.specialist.controller;
 
 import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.appointment.service.AppointmentService;
-import ml.uchvatov.schedule.model.entity.Appointment;
+import ml.uchvatov.schedule.model.dto.AppointmentDto;
 import ml.uchvatov.schedule.model.entity.Review;
 import ml.uchvatov.schedule.model.entity.Schedule;
 import ml.uchvatov.schedule.model.entity.ServiceOffering;
@@ -52,7 +52,7 @@ public class SpecialistController {
     }
 
     @GetMapping("/appointments")
-    public Flux<Appointment> getSpecialistAppointments(@PathVariable String specialistId) {
+    public Flux<AppointmentDto> getSpecialistAppointments(@PathVariable String specialistId) {
         return appointmentService.getAppointmentsBySpecialistId(UUID.fromString(specialistId));
     }
 }

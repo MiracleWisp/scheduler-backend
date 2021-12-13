@@ -3,6 +3,7 @@ package ml.uchvatov.schedule.appointment.service;
 import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.auth.service.AuthenticationFacade;
 import ml.uchvatov.schedule.model.constant.AppointmentStatus;
+import ml.uchvatov.schedule.model.dto.AppointmentDto;
 import ml.uchvatov.schedule.model.entity.Appointment;
 import ml.uchvatov.schedule.model.entity.Schedule;
 import ml.uchvatov.schedule.model.repository.AppointmentRepository;
@@ -63,7 +64,7 @@ public class AppointmentService {
                 .flatMap(appointmentRepository::save);
     }
 
-    public Flux<Appointment> getAppointmentsBySpecialistId(UUID specialistId) {
+    public Flux<AppointmentDto> getAppointmentsBySpecialistId(UUID specialistId) {
         return appointmentRepository.findBySpecialistId(specialistId);
     }
 }
