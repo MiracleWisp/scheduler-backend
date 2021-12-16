@@ -3,6 +3,7 @@ package ml.uchvatov.schedule.serviceoffering.controller;
 import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.model.entity.ServiceOffering;
 import ml.uchvatov.schedule.serviceoffering.service.ServiceOfferingService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ public class ServiceOfferingController {
     private final ServiceOfferingService serviceOfferingService;
 
     @PostMapping
+    @PreAuthorize("hasRole('SPECIALIST')")
     public Mono<ServiceOffering> createServiceOffering(@RequestBody ServiceOffering serviceOffering) {
         return serviceOfferingService.createServiceOffering(serviceOffering);
     }
