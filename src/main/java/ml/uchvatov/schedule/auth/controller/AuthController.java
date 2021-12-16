@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import ml.uchvatov.schedule.auth.dto.AuthResponse;
 import ml.uchvatov.schedule.auth.service.AuthService;
 import ml.uchvatov.schedule.model.entity.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +19,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<AuthResponse>> login(@RequestBody User user) {
-        return authService.login(user).map(ResponseEntity::ok);
+    public Mono<AuthResponse> login(@RequestBody User user) {
+        return authService.login(user);
     }
 
     @PostMapping("/signup")
-    public Mono<ResponseEntity<Void>> signup(@RequestBody User user) {
-        return authService.createUser(user).map(createdUser -> ResponseEntity.ok().build());
+    public Mono<Void> signup(@RequestBody User user) {
+        return authService.createUser(user).flatMap(createdUser -> Mono.empty());
     }
 
     @GetMapping("/me")

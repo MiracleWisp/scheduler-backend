@@ -6,6 +6,7 @@ import ml.uchvatov.schedule.model.constant.AppointmentStatus;
 import ml.uchvatov.schedule.model.dto.AppointmentDto;
 import ml.uchvatov.schedule.model.entity.Appointment;
 import ml.uchvatov.schedule.model.entity.Schedule;
+import ml.uchvatov.schedule.model.entity.ServiceOffering;
 import ml.uchvatov.schedule.model.repository.AppointmentRepository;
 import ml.uchvatov.schedule.model.repository.ScheduleRepository;
 import ml.uchvatov.schedule.model.repository.ServiceOfferingRepository;
@@ -41,7 +42,11 @@ public class AppointmentService {
                     return !startTime.isBefore(schedule.getWorkStartTime()) && !endTime.isAfter(schedule.getWorkEndTime());
                 })
                 .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.NOT_FOUND, "Specialist has no work hours at chosen time"))
-                .flatMap(tuple -> appointmentRepository.existsConflictingAppointments(appointment.getDate(), appointment.getDate().plus(tuple.getT1().getDuration(), ChronoUnit.MINUTES)))
+                .flatMap(tuple ->
+                {
+                    ServiceOffering serviceOffering = tuple.getT1();
+                    return appointmentRepository.existsConflictingAppointments(appointment.getDate(), appointment.getDate().plus(serviceOffering.getDuration(), ChronoUnit.MINUTES), serviceOffering.getId());
+                })
                 .filter(exists -> !exists)
                 .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.CONFLICT, "Timeslot already in use"))
                 .flatMap(tuple -> authenticationFacade.getCurrentUserId())

@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS users
 (
-    id            uuid PRIMARY KEY     DEFAULT uuid_generate_v4(),
-    first_name    text        NOT NULL,
-    last_name     text        NOT NULL,
-    email         text UNIQUE NOT NULL,
-    password      text        NOT NULL,
-    is_specialist boolean     NOT NULL DEFAULT false,
+    id            uuid PRIMARY KEY       DEFAULT uuid_generate_v4(),
+    first_name    text          NOT NULL,
+    last_name     text          NOT NULL,
+    email         citext UNIQUE NOT NULL,
+    password      text          NOT NULL,
+    is_specialist boolean       NOT NULL DEFAULT false,
     job_title     text,
     about         text,
     roles         text[]
