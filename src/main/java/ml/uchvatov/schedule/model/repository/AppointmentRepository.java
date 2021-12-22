@@ -21,6 +21,7 @@ public interface AppointmentRepository extends ReactiveCrudRepository<Appointmen
             join users c on a.client_id = c.id
             join users sp on s.specialist_id = sp.id
             where s.specialist_id = :specialistId
+            order by a.date
             """)
     Flux<AppointmentDto> findBySpecialistId(UUID specialistId);
 
