@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS appointments
 (
     id         uuid PRIMARY KEY     DEFAULT uuid_generate_v4(),
     date       timestamptz NOT NULL,
+    end_date   timestamptz NOT NULL,
     created_at timestamptz          DEFAULT now(),
     status     text        NOT NULL DEFAULT 'DRAFT',
     client_id  uuid        NOT NULL REFERENCES users,
@@ -46,8 +47,8 @@ CREATE TABLE IF NOT EXISTS schedules
 (
     id              uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     day             smallint NOT NULL CHECK ( day >= 0 AND day <= 6),
-    work_start_time time     NOT NULL,
-    work_end_time   time     NOT NULL,
+    work_start_time timetz     NOT NULL,
+    work_end_time   timetz     NOT NULL,
 --     start_date      date     NOT NULL,
 --     end_date        date,
     specialist_id   uuid     NOT NULL REFERENCES users,

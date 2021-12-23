@@ -18,8 +18,9 @@ public class Appointment {
     private UUID id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
     private ZonedDateTime date;
-    private AppointmentStatus status;
     @JsonIgnore
+    private ZonedDateTime endDate;
+    private AppointmentStatus status;
     private UUID clientId;
     private UUID serviceId;
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -37,8 +37,9 @@ public class AppointmentService {
                 .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.NOT_FOUND, "Specialist has no work hours at chosen day of week"))
                 .filter(tuple -> {
                     Schedule schedule = tuple.getT2();
-                    LocalTime startTime = appointment.getDate().toLocalTime();
-                    LocalTime endTime = startTime.plus(tuple.getT1().getDuration(), ChronoUnit.MINUTES);
+                    OffsetTime startTime = appointment.getDate().toOffsetDateTime().toOffsetTime();
+                    appointment.setEndDate(appointment.getDate().plusMinutes(tuple.getT1().getDuration()));
+                    OffsetTime endTime = startTime.plus(tuple.getT1().getDuration(), ChronoUnit.MINUTES);
                     return !startTime.isBefore(schedule.getWorkStartTime()) && !endTime.isAfter(schedule.getWorkEndTime());
                 })
                 .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.NOT_FOUND, "Specialist has no work hours at chosen time"))

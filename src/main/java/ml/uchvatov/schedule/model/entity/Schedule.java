@@ -6,7 +6,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.util.UUID;
 
 @Data
@@ -16,10 +16,10 @@ public class Schedule {
     @Id
     private UUID id;
     private int day;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime workStartTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime workEndTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSSXXX", timezone = "UTC")
+    private OffsetTime workStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss.SSSXXX", timezone = "UTC")
+    private OffsetTime workEndTime;
     /*
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate;

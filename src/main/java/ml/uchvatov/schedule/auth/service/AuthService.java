@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalTime;
+import java.time.OffsetTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -51,8 +51,8 @@ public class AuthService {
                             Schedule schedule = new Schedule();
                             schedule.setDay(day);
                             schedule.setSpecialistId(createdUser.getId());
-                            schedule.setWorkEndTime(LocalTime.MIN);
-                            schedule.setWorkStartTime(LocalTime.MIN);
+                            schedule.setWorkEndTime(OffsetTime.parse("10:00:00+00:00"));
+                            schedule.setWorkStartTime(OffsetTime.parse("10:00:00+00:00"));
                             schedules.add(schedule);
                         });
                         return scheduleRepository.saveAll(schedules).then(Mono.just(createdUser));
@@ -75,7 +75,8 @@ public class AuthService {
 
     public Mono<User> getCurrentUser() {
         return authenticationFacade.getCurrentUserId()
-                .flatMap(userRepository::findById);
+                .flatMap(userRepository::findById)
+                .transform(mono -> MonoUtils.errorIfEmpty(mono, HttpStatus.UNAUTHORIZED, "UNAUTHORIZED"));
     }
 }
 
