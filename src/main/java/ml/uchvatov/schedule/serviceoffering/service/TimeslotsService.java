@@ -41,13 +41,13 @@ public class TimeslotsService {
                     OffsetTime timeslot = workStartTime;
                     List<OffsetTime> timeslots = new ArrayList<>();
                     for (Appointment appointment : tuple.getT3()) {
-                        while (timeslot.plusMinutes(duration).isBefore(appointment.getDate().toOffsetDateTime().toOffsetTime())) {
+                        while (!timeslot.plusMinutes(duration).isAfter(appointment.getDate().toOffsetDateTime().toOffsetTime())) {
                             timeslots.add(timeslot);
                             timeslot = timeslot.plusMinutes(15);
                         }
                         timeslot = appointment.getEndDate().toOffsetDateTime().toOffsetTime().withOffsetSameInstant(UTC);
                     }
-                    while (timeslot.plusMinutes(duration).isBefore(workEndTime)) {
+                    while (!timeslot.plusMinutes(duration).isAfter(workEndTime)) {
                         timeslots.add(timeslot);
                         timeslot = timeslot.plusMinutes(15);
                     }

@@ -73,4 +73,13 @@ public class AppointmentService {
     public Flux<AppointmentDto> getAppointmentsBySpecialistId(UUID specialistId) {
         return appointmentRepository.findBySpecialistId(specialistId);
     }
+
+    public Flux<AppointmentDto> getCurrentUserAppointments() {
+        return authenticationFacade.getCurrentUserId()
+                .flatMapMany(appointmentRepository::findByClientId);
+    }
+
+    public Mono<Void> deleteAppointment(UUID appointmentId) {
+        return appointmentRepository.deleteById(appointmentId);
+    }
 }

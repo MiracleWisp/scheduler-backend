@@ -26,13 +26,24 @@ public interface AppointmentRepository extends ReactiveCrudRepository<Appointmen
     Flux<AppointmentDto> findBySpecialistId(UUID specialistId);
 
     @Query("""
+            SELECT a.*, c.first_name || ' ' || c.last_name as client_name,
+            s.price as service_price, s.duration as service_duration, s.name as service_name,
+            sp.first_name || ' ' || sp.last_name as specialist_name, sp.job_title as specialist_job_title
+            from appointments a
+            join services s on s.id = a.service_id
+            join users c on a.client_id = c.id
+            join users sp on s.specialist_id = sp.id
+            where a.client_id = :clientId
+            order by a.date
+            """)
+    Flux<AppointmentDto> findByClientId(UUID clientId);
+
+    @Query("""
             select * from appointments a join services s on s.id = a.service_id
             where a.status != 'CANCELED' AND s.specialist_id = :specialistId
             AND a.date between :startDate and :endDate and (a.status != 'DRAFT' OR a.created_at + make_interval(mins => 15) > now())
             """)
     Flux<Appointment> findBySpecialistIdAndDateBetween(UUID specialistId, ZonedDateTime startDate, ZonedDateTime endDate);
-
-    Flux<Appointment> findByClientId(UUID clientId);
 
     @Query("""
             select case when count(1) > 0 then true else false end from appointments a join services s on s.id = a.service_id
